@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Net;
 using System.Web;
-using System.Web.Mvc;
 using System.Web.Routing;
-using Moq;
+using HttpServer;
+using HttpListener=HttpServer.HttpListener;
 
 namespace Frank
 {
@@ -19,38 +20,47 @@ namespace Frank
     {
         private readonly RouteCollection routes = new RouteCollection();
 
+        public FrankApp()
+        {
+            routes.RouteExistingFiles = false;
+        }
+
         public abstract void Setup();
 
-        public void Run()
+        public void Run(int port)
         {
-            throw new NotImplementedException();
+            HttpListener httpListener = HttpListener.Create(IPAddress.Any, port);
+            httpListener.RequestReceived += OnRequest;
+            httpListener.Start(5);
         }
 
-        public string Request(string url)
+        
+        private void OnRequest(object source, RequestEventArgs args)
         {
-            var mockHttpContextBase = new Mock<HttpContextBase>();
-            mockHttpContextBase.Setup(m => m.Request.AppRelativeCurrentExecutionFilePath).Returns(url);
-            RouteData routeData = routes.GetRouteData(mockHttpContextBase.Object);
+            IHttpClientContext context = (IHttpClientContext)source;
+            IHttpRequest request = args.Request;
 
-            string output = routeData + "\n";
-            foreach (var key in routeData.Values.Keys)
-                output += string.Format("{0} = {1}\n", key, routeData.Values[key]);
+            // Respond is a small convenience function that let's you send one string to the browser.
+            // you can also use the Send, SendHeader and SendBody methods to have total control.
+            //if (request.Uri.AbsolutePath == "/hello")
+            context.Respond("Hi there, what do you want do do with " + request.Uri.AbsolutePath); 
 
-            return output;
         }
+        
 
         //TODO: Implement also Post, Put and Delete
         protected void Get(string url, Func<RouteValueDictionary, string> action)
         {
-            var route = new Route(url, new RouteValueDictionary(), new RouteValueDictionary {{"httpMethod", "GET"}},
-                                  new FrankRouteHandler(action));
+            //var route = new Route(url, new RouteValueDictionary(), new RouteValueDictionary {{"httpMethod", "GET"}},
+            //                      new FrankRouteHandler(action));
+            var route = new Route(url, new FrankRouteHandler(action));
             routes.Add(route);
         }
     }
 
     public class FrankRouteHandler : IRouteHandler
     {
-        private Func<RouteValueDictionary, string> _action;
+        private readonly Func<RouteValueDictionary, string> _action;
 
         public FrankRouteHandler(Func<RouteValueDictionary, string> action)
         {
