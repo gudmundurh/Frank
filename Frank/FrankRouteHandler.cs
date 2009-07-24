@@ -14,9 +14,9 @@ namespace Frank
             _action = action;
         }
 
-        public void Process(IHttpRequest request, IHttpResponse response, IHttpSession session)
+        public void Process(RouteValues routeValues, IHttpRequest request, IHttpResponse response, IHttpSession session)
         {
-            string output = _action.Invoke(new ActionParameters(request, response, session));
+            string output = _action.Invoke(new ActionParameters(routeValues, request, response, session));
             var writer = new StreamWriter(response.Body);
             writer.Write(output);
             writer.Flush();
