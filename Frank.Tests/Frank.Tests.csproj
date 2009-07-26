@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{F1F980C4-371C-495C-A3E9-2076E9921496}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{1E9C41B3-35AA-4733-9B80-516D5B082A30}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Frank</RootNamespace>
-    <AssemblyName>Frank</AssemblyName>
+    <RootNamespace>Frank.Tests</RootNamespace>
+    <AssemblyName>Frank.Tests</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -33,18 +33,15 @@
   <ItemGroup>
     <Reference Include="HttpServer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=0505b774db687742, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Assemblies\HttpServer_v1.0_debug\HttpServer.dll</HintPath>
+      <HintPath>..\Frank\bin\Debug\HttpServer.dll</HintPath>
     </Reference>
+    <Reference Include="Moq, Version=3.1.416.3, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Assemblies\Moq.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework, Version=2.5.1.9189, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Web" />
-    <Reference Include="System.Web.Abstractions">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Web.Mvc, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
-    <Reference Include="System.Web.Routing">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Xml.Linq">
@@ -57,15 +54,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ActionParameters.cs" />
-    <Compile Include="App.cs" />
-    <Compile Include="DataStore.cs" />
-    <Compile Include="FrankApp.cs" />
-    <Compile Include="FrankRouteHandler.cs" />
-    <Compile Include="HttpMethod.cs" />
+    <Compile Include="RouteTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Route.cs" />
-    <Compile Include="RouteValues.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Frank\Frank.csproj">
+      <Project>{F1F980C4-371C-495C-A3E9-2076E9921496}</Project>
+      <Name>Frank</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace Frank
@@ -17,6 +18,13 @@ namespace Frank
                                                 return "That I can not do";
                                             return string.Format("You want me to do {0}, <em>{1}</em>?", r["action"], r["name"]);
                                         });
+
+            Get("/counter", r =>
+                                {
+                                    int counter = r.Store.Get<int>("counter");
+                                    r.Store["counter"] = counter++;
+                                    return counter.ToString();
+                                });
 
             Get("/search/",
                 r =>

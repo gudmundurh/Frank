@@ -5,6 +5,8 @@ namespace Frank
 {
     public class ActionParameters
     {
+        private static readonly DataStore _theStore = new DataStore();
+
         public ActionParameters(RouteValues routeValues, IHttpRequest request, IHttpResponse response,
                                 IHttpSession session)
         {
@@ -12,7 +14,10 @@ namespace Frank
             Request = request;
             Response = response;
             Session = session;
+            Store = _theStore;
         }
+
+        public DataStore Store { get; private set; }
 
         public string this[string key]
         {
